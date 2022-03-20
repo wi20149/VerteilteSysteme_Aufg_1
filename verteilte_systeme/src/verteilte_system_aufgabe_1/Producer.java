@@ -6,6 +6,7 @@ public class Producer extends Thread{
 
 	
 		// initialization of queue size
+	//Länge der Warteschlange
 		static final int MAX = 7;
 		private Vector messages = new Vector();
 
