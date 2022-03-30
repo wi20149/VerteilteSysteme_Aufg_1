@@ -4,9 +4,7 @@ import java.util.Vector;
 public class Producer extends Thread{
 	
 
-	
-		// initialization of queue size
-	//LÃ¤nge der Warteschlange = 7 
+		// Warteschlange der Länge 7 
 		static final int MAX = 7;
 		private Vector messages = new Vector();
 
@@ -16,10 +14,10 @@ public class Producer extends Thread{
 			try {
 				while (true) {
 
-					// producing a message to send to the consumer
+					//mit dem Aufruf dieser Methode wird eine Nachricht erstellt
 					putMessage();
-
-					// producer goes to sleep when the queue is full
+					
+					//Producer schläft für 1s wenn die Warteschlange voll ist
 					sleep(1000);
 				}
 			}
@@ -31,13 +29,14 @@ public class Producer extends Thread{
 			throws InterruptedException
 		{
 
-			// checks whether the queue is full or not
+			//Abfrage ob die Warteschlange voll ist 
 			while (messages.size() == MAX)
 
-				// waits for the queue to get empty
+				//wartet bis die Warteschlange leer ist 
 				wait();
 
-			// then again adds element or messages
+			//fügt neue Nachricht hinzu 
+			//in diesem Fall wird eine Nachricht mit dem Datum und der aktuellen Uhrzeit versendet 
 			messages.addElement(new java.util.Date().toString());
 			notify();
 		}
@@ -50,7 +49,7 @@ public class Producer extends Thread{
 				wait();
 			String message = (String)messages.firstElement();
 
-			// extracts the message from the queue
+			//holt sich die Nachrichten aus der Warteschlangen 
 			messages.removeElement(message);
 			return message;
 		}
@@ -71,7 +70,7 @@ class Consumer extends Thread {
 			while (true) {
 				String message = producer.getMessage();
 
-				// sends a reply to producer got a message
+				//sendet eine Erhaltsbestätigung 
 				System.out.println("Got message: " + message);
 				sleep(2000);
 			}
@@ -82,6 +81,7 @@ class Consumer extends Thread {
 
 	public static void main(String args[])
 	{
+		//startet den Producer und weist ihm den Consumer an 
 		Producer producer = new Producer();
 		producer.start();
 		new Consumer(producer).start();
